@@ -1,0 +1,6 @@
+{
+  "language": "fr",
+  "colorWords": ["ROUGE", "BLEU", "VERT", "JAUNE", "VIOLET", "ORANGE"],
+  "neutralWords": ["CHIEN", "MAISON", "TABLE", "LIVRE", "VOITURE", "ARBRE", "EAU", "SOLEIL", "LUNE", "ETOILE", "OISEAU", "POISSON", "CHAISE", "FENETRE", "PORTE", "TELEPHONE", "HORLOGE", "CHAUSSURE", "CHAPEAU", "MANTEAU"],
+  "emotionalWords": ["ANXIETE", "PEUR", "JOIE", "CALME", "COLERE", "TRISTESSE", "ESPOIR", "AMOUR", "PAIX", "STRESS", "INQUIETUDE", "BONHEUR", "LIBERTE", "CONFIANCE", "COURAGE"]
+}

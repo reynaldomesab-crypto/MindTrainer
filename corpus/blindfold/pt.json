@@ -1,0 +1,53 @@
+{
+  "language": "pt",
+  "exerciseType": "BLINDFOLD",
+  "items": [
+    {
+      "id": "pt_bf_001",
+      "language": "pt",
+      "text": "A velha bruxa zangada jurou que o rei xexeu fizesse o jantar rapidamente.",
+      "charCount": 69,
+      "tier": 1,
+      "topic": "pangrama clássico português",
+      "rareCharDensity": 0.08
+    },
+    {
+      "id": "pt_bf_002",
+      "language": "pt",
+      "text": "O mel nunca estraga. Arqueólogos encontraram mel de 3000 anos em tumbas egípcias ainda comestível.",
+      "charCount": 91,
+      "tier": 1,
+      "topic": "curiosidade científica",
+      "rareCharDensity": 0.07
+    },
+    {
+      "id": "pt_bf_003",
+      "language": "pt",
+      "text": "Os polvos têm três corações e sangue azul. Dois corações bombeiam sangue para as brânquias e o terceiro para o resto do corpo.",
+      "charCount": 109,
+      "tier": 1,
+      "topic": "fato animal",
+      "rareCharDensity": 0.06
+    },
+    {
+      "id": "pt_bf_004",
+      "language": "pt",
+      "text": "A guerra mais curta da história durou apenas 38 minutos. Foi entre a Grã-Bretanha e Zanzibar em 1896.",
+      "charCount": 97,
+      "tier": 2,
+      "topic": "fato histórico",
+      "rareCharDensity": 0.08
+    },
+    {
+      "id": "pt_bf_005",
+      "language": "pt",
+      "text": "Bananas são botanicamente frutos, mas morangos não são. Botanicamente, bagas desenvolvem-se a partir de um único ovário.",
+      "charCount": 112,
+      "tier": 2,
+      "topic": "fato botânico",
+      "rareCharDensity": 0.07
+    }
+  ],
+  "count": 5,
+  "generatedAt": "2024-01-15T10:00:00Z"
+}

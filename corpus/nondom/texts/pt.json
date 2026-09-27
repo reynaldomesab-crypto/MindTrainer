@@ -1,0 +1,43 @@
+{
+  "language": "pt",
+  "exerciseType": "NON_DOMINANT",
+  "items": [
+    {
+      "id": "pt_nd_001",
+      "text": "A velha bruxa zangada jurou que o rei xexeu fizesse o jantar rapidamente. Este pangrama contém todas as letras do alfabeto português.",
+      "charCount": 102,
+      "tier": 1,
+      "topic": "pangrama clássico português"
+    },
+    {
+      "id": "pt_nd_002",
+      "text": "O mel nunca estraga. Arqueólogos encontraram mel de 3000 anos em tumbas egípcias que ainda estava perfeitamente comestível.",
+      "charCount": 107,
+      "tier": 1,
+      "topic": "curiosidade científica"
+    },
+    {
+      "id": "pt_nd_003",
+      "text": "Polvos têm três corações e sangue azul. Dois corações bombeiam sangue para as brânquias enquanto o terceiro bombeia para o corpo.",
+      "charCount": 109,
+      "tier": 2,
+      "topic": "fato animal"
+    },
+    {
+      "id": "pt_nd_004",
+      "text": "A guerra mais curta da história durou apenas 38 minutos. Foi entre a Grã-Bretanha e Zanzibar em 1896 por uma disputa de sucessão.",
+      "charCount": 120,
+      "tier": 2,
+      "topic": "fato histórico"
+    },
+    {
+      "id": "pt_nd_005",
+      "text": "Bananas são botanicamente bagas, mas morangos não são. Bagas verdadeiras se desenvolvem a partir de um único ovário de flor.",
+      "charCount": 113,
+      "tier": 3,
+      "topic": "fato botânico"
+    }
+  ],
+  "count": 5,
+  "generatedAt": "2024-01-15T10:00:00Z"
+}

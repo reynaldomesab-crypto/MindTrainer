@@ -1,0 +1,53 @@
+{
+  "language": "zh",
+  "exerciseType": "BLINDFOLD",
+  "items": [
+    {
+      "id": "zh_bf_001",
+      "language": "zh",
+      "text": "蜂蜜永远不会变质。考古学家在埃及古墓中发现了3000年前的蜂蜜，仍然可以食用。秘诀在于其低水分含量和天然酸度，防止细菌生长。",
+      "charCount": 62,
+      "tier": 1,
+      "topic": "科学冷知识",
+      "rareCharDensity": 0.08
+    },
+    {
+      "id": "zh_bf_002",
+      "language": "zh",
+      "text": "章鱼有三颗心脏和蓝色的血液。两颗心脏将血液泵送到鳃，第三颗泵送到身体其他部位。当它们游泳时，主心脏会停止跳动，所以它们更喜欢爬行。",
+      "charCount": 86,
+      "tier": 1,
+      "topic": "动物趣闻",
+      "rareCharDensity": 0.07
+    },
+    {
+      "id": "zh_bf_003",
+      "language": "zh",
+      "text": "历史上最短的战争仅持续了38分钟。那是1896年英国和桑给巴尔之间的战争。",
+      "charCount": 48,
+      "tier": 2,
+      "topic": "历史事实",
+      "rareCharDensity": 0.08
+    },
+    {
+      "id": "zh_bf_004",
+      "language": "zh",
+      "text": "蜂蜜是唯一永不腐烂的食物。考古学家在埃及法老墓穴中发现了3000多年前的蜂蜜，至今仍可食用。",
+      "charCount": 64,
+      "tier": 2,
+      "topic": "科学常识",
+      "rareCharDensity": 0.07
+    },
+    {
+      "id": "zh_bf_005",
+      "language": "zh",
+      "text": "香蕉在植物学上是浆果，但草莓不是。真正的浆果是由单一花的单一子房发育而成的果实。",
+      "charCount": 56,
+      "tier": 3,
+      "topic": "植物学事实",
+      "rareCharDensity": 0.06
+    }
+  ],
+  "count": 5,
+  "generatedAt": "2024-01-15T10:00:00Z"
+}

@@ -1,0 +1,43 @@
+{
+  "language": "de",
+  "exerciseType": "NON_DOMINANT",
+  "items": [
+    {
+      "id": "de_nd_001",
+      "text": "Zwölf Boxkämpfer jagen Viktor quer über den großen Sylter Deich. Dieser Pangramm enthält alle Buchstaben des deutschen Alphabets.",
+      "charCount": 99,
+      "tier": 1,
+      "topic": "klassischer Pangramm"
+    },
+    {
+      "id": "de_nd_002",
+      "text": "Honig verdirbt nie. Archäologen fanden 3000 Jahre alten Honig in ägyptischen Gräbern, der noch perfekt essbar war.",
+      "charCount": 97,
+      "tier": 1,
+      "topic": "wissenschaftliche Kuriosität"
+    },
+    {
+      "id": "de_nd_003",
+      "text": "Tintenfische haben drei Herzen und blaues Blut. Zwei Herzen pumpen Blut zu den Kiemen, während das dritte zum Körper pumpt.",
+      "charCount": 99,
+      "tier": 2,
+      "topic": "Tierfakt"
+    },
+    {
+      "id": "de_nd_004",
+      "text": "Der kürzeste Krieg der Geschichte dauerte nur 38 Minuten. Er war zwischen Großbritannien und Sansibar im Jahr 1896 wegen eines Thronfolgestreits.",
+      "charCount": 115,
+      "tier": 2,
+      "topic": "historischer Fakt"
+    },
+    {
+      "id": "de_nd_005",
+      "text": "Bananen sind botanisch Beeren, aber Erdbeeren sind es nicht. Echte Beeren entwickeln sich aus einer einzelnen Blütenovarielle.",
+      "charCount": 107,
+      "tier": 3,
+      "topic": "botanischer Fakt"
+    }
+  ],
+  "count": 5,
+  "generatedAt": "2024-01-15T10:00:00Z"
+}

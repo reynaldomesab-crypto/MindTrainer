@@ -1,0 +1,53 @@
+{
+  "language": "ja",
+  "exerciseType": "BLINDFOLD",
+  "items": [
+    {
+      "id": "ja_bf_001",
+      "language": "ja",
+      "text": "ハチミツは腐らない。考古学者がエジプトの墳墓で3000年前のハチミツを発見し、まだ食べられた。秘密は低水分と天然の酸性で細菌を防ぐこと。",
+      "charCount": 72,
+      "tier": 1,
+      "topic": "科学の豆知識",
+      "rareCharDensity": 0.08
+    },
+    {
+      "id": "ja_bf_002",
+      "language": "ja",
+      "text": "タコは3つの心臓と青い血を持つ。2つはエラに血を送り、1つは体の他の部分に送る。泳ぐとき主心臓が止まるため、這うことを好む。",
+      "charCount": 76,
+      "tier": 1,
+      "topic": "動物のトリビア",
+      "rareCharDensity": 0.07
+    },
+    {
+      "id": "ja_bf_003",
+      "language": "ja",
+      "text": "歴史上最短の戦争はわずか38分だった。1896年イギリスとザンジバルの間で起きた。",
+      "charCount": 49,
+      "tier": 2,
+      "topic": "歴史の事実",
+      "rareCharDensity": 0.08
+    },
+    {
+      "id": "ja_bf_004",
+      "language": "ja",
+      "text": "バナナは植物学的にはベリーだが、イチゴは違う。真のベリーは単一の花の単一の子房から発達する果実。",
+      "charCount": 64,
+      "tier": 3,
+      "topic": "植物学の事実",
+      "rareCharDensity": 0.07
+    },
+    {
+      "id": "ja_bf_005",
+      "language": "ja",
+      "text": "オクトパスは青い血を持つ。銅ベースのヘモシアンが酸素を運ぶため、酸素化すると青く見える。",
+      "charCount": 58,
+      "tier": 2,
+      "topic": "生物学の事実",
+      "rareCharDensity": 0.06
+    }
+  ],
+  "count": 5,
+  "generatedAt": "2024-01-15T10:00:00Z"
+}

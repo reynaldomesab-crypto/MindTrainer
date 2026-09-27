@@ -1,0 +1,53 @@
+{
+  "language": "de",
+  "exerciseType": "BLINDFOLD",
+  "items": [
+    {
+      "id": "de_bf_001",
+      "language": "de",
+      "text": "Zwölf Boxkämpfer jagen Viktor quer über den großen Sylter Deich.",
+      "charCount": 65,
+      "tier": 1,
+      "topic": "klassischer Pangramm",
+      "rareCharDensity": 0.08
+    },
+    {
+      "id": "de_bf_002",
+      "language": "de",
+      "text": "Honig verdirbt nie. Archäologen fanden 3000 Jahre alten Honig in ägyptischen Gräbern, der noch essbar war.",
+      "charCount": 97,
+      "tier": 1,
+      "topic": "wissenschaftliche Kuriosität",
+      "rareCharDensity": 0.07
+    },
+    {
+      "id": "de_bf_003",
+      "language": "de",
+      "text": "Tintenfische haben drei Herzen und blaues Blut. Zwei Herzen pumpen Blut zu den Kiemen, das dritte zum Körper.",
+      "charCount": 98,
+      "tier": 1,
+      "topic": "Tierfakt",
+      "rareCharDensity": 0.06
+    },
+    {
+      "id": "de_bf_004",
+      "language": "de",
+      "text": "Der kürzeste Krieg der Geschichte dauerte nur 38 Minuten. Er war zwischen Großbritannien und Sansibar im Jahr 1896.",
+      "charCount": 103,
+      "tier": 2,
+      "topic": "historischer Fakt",
+      "rareCharDensity": 0.08
+    },
+    {
+      "id": "de_bf_005",
+      "language": "de",
+      "text": "Bananen sind botanisch Beeren, aber Erdbeeren sind es nicht. Echte Beeren entwickeln sich aus einem einzigen Fruchtknoten.",
+      "charCount": 106,
+      "tier": 2,
+      "topic": "botanischer Fakt",
+      "rareCharDensity": 0.07
+    }
+  ],
+  "count": 5,
+  "generatedAt": "2024-01-15T10:00:00Z"
+}

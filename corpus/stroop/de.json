@@ -1,0 +1,6 @@
+{
+  "language": "de",
+  "colorWords": ["ROT", "BLAU", "GRÜN", "GELB", "LILA", "ORANGE"],
+  "neutralWords": ["HUND", "HAUS", "TISCH", "BUCH", "AUTO", "BAUM", "WASSER", "SONNE", "MOND", "STERN", "VOGEL", "FISCH", "STUHL", "FENSTER", "TÜR", "TELEFON", "UHR", "SCHUH", "HUT", "MANTEL"],
+  "emotionalWords": ["ANGST", "FREUDE", "RUHE", "WUT", "TRAURIGKEIT", "HOFFNUNG", "LIEBE", "FRIEDEN", "STRESS", "SORGE", "GLÜCK", "FREIHEIT", "VERTRAUEN", "MUT"]
+}

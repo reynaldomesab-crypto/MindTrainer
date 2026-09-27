@@ -1,0 +1,28 @@
+{
+  "exerciseType": "NON_DOMINANT",
+  "items": [
+    {
+      "id": "tap_seq_01",
+      "gridSize": 3,
+      "targets": [0, 4, 8, 2, 6],
+      "count": 5,
+      "timeLimitMs": 15000
+    },
+    {
+      "id": "tap_seq_02",
+      "gridSize": 4,
+      "targets": [0, 5, 10, 15, 3, 12, 6, 9],
+      "count": 8,
+      "timeLimitMs": 20000
+    },
+    {
+      "id": "tap_seq_03",
+      "gridSize": 3,
+      "targets": [4, 0, 8, 2, 6, 4, 1, 7, 3, 5],
+      "count": 10,
+      "timeLimitMs": 25000
+    }
+  ],
+  "count": 3,
+  "generatedAt": "2024-01-15T10:00:00Z"
+}

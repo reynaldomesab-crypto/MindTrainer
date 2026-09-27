@@ -1,0 +1,43 @@
+{
+  "language": "it",
+  "exerciseType": "NON_DOMINANT",
+  "items": [
+    {
+      "id": "it_nd_001",
+      "text": "Il miele non si guasta mai. Gli archeologi hanno trovato miele di 3000 anni nelle tombe egiziane che era ancora perfettamente commestibile. Il segreto è il suo basso contenuto d'acqua e l'acidità naturale che impedisce la crescita batterica.",
+      "charCount": 182,
+      "tier": 1,
+      "topic": "curiosità scientifica"
+    },
+    {
+      "id": "it_nd_002",
+      "text": "I polpi hanno tre cuori e sangue blu. Due cuori pompano sangue alle branchie e il terzo al resto del corpo. Quando nuotano, il cuore principale si ferma, per questo preferiscono strisciare.",
+      "charCount": 178,
+      "tier": 1,
+      "topic": "curiosità animale"
+    },
+    {
+      "id": "it_nd_003",
+      "text": "La guerra più breve della storia è durata solo 38 minuti. Fu tra la Gran Bretagna e Zanzibar nel 1896 per una disputa di successione.",
+      "charCount": 115,
+      "tier": 2,
+      "topic": "fatto storico"
+    },
+    {
+      "id": "it_nd_004",
+      "text": "Le banane sono bacche, ma le fragole no. Botanicamente, le bacche si sviluppano da un singolo ovario di un fiore.",
+      "charCount": 100,
+      "tier": 3,
+      "topic": "fatto botanico"
+    },
+    {
+      "id": "it_nd_005",
+      "text": "Gli squali non hanno ossa. Il loro scheletro è fatto interamente di cartilagine, il che li rende più leggeri e flessibili.",
+      "charCount": 98,
+      "tier": 2,
+      "topic": "fatto biologico"
+    }
+  ],
+  "count": 5,
+  "generatedAt": "2024-01-15T10:00:00Z"
+}

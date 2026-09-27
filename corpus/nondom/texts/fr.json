@@ -1,0 +1,43 @@
+{
+  "language": "fr",
+  "exerciseType": "NON_DOMINANT",
+  "items": [
+    {
+      "id": "fr_nd_001",
+      "text": "Portez ce vieux whisky au juge blond qui fume. Ce pangramme contient toutes les lettres de l'alphabet français.",
+      "charCount": 96,
+      "tier": 1,
+      "topic": "pangramme classique français"
+    },
+    {
+      "id": "fr_nd_002",
+      "text": "Le miel ne se périme jamais. Des archéologues ont trouvé du miel de 3000 ans dans des tombes égyptiennes encore comestible.",
+      "charCount": 109,
+      "tier": 1,
+      "topic": "curiosité scientifique"
+    },
+    {
+      "id": "fr_nd_003",
+      "text": "Les pieuvres ont trois cœurs et du sang bleu. Deux cœurs pompent le sang vers les branchies et le troisième vers le corps.",
+      "charCount": 108,
+      "tier": 2,
+      "topic": "fait animal"
+    },
+    {
+      "id": "fr_nd_004",
+      "text": "La guerre la plus courte de l'histoire n'a duré que 38 minutes. C'était entre la Grande-Bretagne et Zanzibar en 1896.",
+      "charCount": 106,
+      "tier": 2,
+      "topic": "fait historique"
+    },
+    {
+      "id": "fr_nd_005",
+      "text": "Les bananes sont des baies, mais les fraises ne le sont pas. Botaniquement, les baies se développent à partir d'un seul ovaire de fleur.",
+      "charCount": 116,
+      "tier": 3,
+      "topic": "fait botanique"
+    }
+  ],
+  "count": 5,
+  "generatedAt": "2024-01-15T10:00:00Z"
+}

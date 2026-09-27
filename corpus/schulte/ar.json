@@ -1,0 +1,13 @@
+{
+  "language": "ar",
+  "exerciseType": "SCHULTE",
+  "items": [
+    {"seed": 1001, "size": 5, "timeLimitMs": 30000, "showNumbers": true},
+    {"seed": 1002, "size": 5, "timeLimitMs": 30000, "showNumbers": true},
+    {"seed": 1003, "size": 5, "timeLimitMs": 30000, "showNumbers": true},
+    {"seed": 1004, "size": 5, "timeLimitMs": 30000, "showNumbers": true},
+    {"seed": 1005, "size": 5, "timeLimitMs": 30000, "showNumbers": true}
+  ],
+  "count": 5,
+  "generatedAt": "2024-01-15T10:00:00Z"
+}
