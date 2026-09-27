@@ -1,0 +1,6 @@
+{
+  "language": "es",
+  "colorWords": ["ROJO", "AZUL", "VERDE", "AMARILLO", "MORADO", "NARANJA"],
+  "neutralWords": ["PERRO", "CASA", "MESA", "LIBRO", "COCHE", "ÁRBOL", "AGUA", "SOL", "LUNA", "ESTRELLA", "PAJARO", "PEZ", "SILLA", "VENTANA", "PUERTA", "TELEFONO", "RELOJ", "ZAPATO", "SOMBRERO", "ABRIGO"],
+  "emotionalWords": ["ANSIEDAD", "MIEDO", "ALEGRÍA", "CALMA", "IRA", "TRISTEZA", "ESPERANZA", "AMOR", "PAZ", "ESTRÉS", "PREOCUPACIÓN", "FELICIDAD", "LIBERTAD", "CONFIANZA", "VALENTÍA"]
+}

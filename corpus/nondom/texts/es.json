@@ -1,0 +1,43 @@
+{
+  "language": "es",
+  "exerciseType": "NON_DOMINANT",
+  "items": [
+    {
+      "id": "es_nd_001",
+      "text": "El veloz murciélago hindú comía feliz cardillo y kiwi. La cigüeña tocaba el saxofón detrás del palenque de paja.",
+      "charCount": 102,
+      "tier": 1,
+      "topic": "pangrama clásico español"
+    },
+    {
+      "id": "es_nd_002",
+      "text": "La miel nunca se echa a perder. Arqueólogos encontraron miel de 3000 años en tumbas egipcias que aún era perfectamente comestible.",
+      "charCount": 107,
+      "tier": 1,
+      "topic": "curiosidad científica"
+    },
+    {
+      "id": "es_nd_003",
+      "text": "Los pulpos tienen tres corazones y sangre azul. Dos corazones bombean sangre a las branquias mientras el tercero bombea al cuerpo.",
+      "charCount": 108,
+      "tier": 2,
+      "topic": "hecho animal"
+    },
+    {
+      "id": "es_nd_004",
+      "text": "La guerra más corta de la historia duró solo 38 minutos. Fue entre Gran Bretaña y Zanzíbar en 1896 por una disputa de sucesión.",
+      "charCount": 120,
+      "tier": 2,
+      "topic": "hecho histórico"
+    },
+    {
+      "id": "es_nd_005",
+      "text": "Los plátanos son botánicamente bayas, pero las fresas no lo son. Las verdaderas bayas se desarrollan a partir de un solo ovario de flor.",
+      "charCount": 115,
+      "tier": 3,
+      "topic": "hecho botánico"
+    }
+  ],
+  "count": 5,
+  "generatedAt": "2024-01-15T10:00:00Z"
+}

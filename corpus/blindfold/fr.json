@@ -1,0 +1,53 @@
+{
+  "language": "fr",
+  "exerciseType": "BLINDFOLD",
+  "items": [
+    {
+      "id": "fr_bf_001",
+      "language": "fr",
+      "text": "Portez ce vieux whisky au juge blond qui fume. Ce pangramme contient toutes les lettres de l'alphabet.",
+      "charCount": 96,
+      "tier": 1,
+      "topic": "pangramme classique français",
+      "rareCharDensity": 0.09
+    },
+    {
+      "id": "fr_bf_002",
+      "language": "fr",
+      "text": "Le miel ne se périme jamais. Des archéologues ont trouvé du miel de 3000 ans dans des tombes égyptiennes encore comestible.",
+      "charCount": 109,
+      "tier": 1,
+      "topic": "curiosité scientifique",
+      "rareCharDensity": 0.08
+    },
+    {
+      "id": "fr_bf_003",
+      "language": "fr",
+      "text": "Les pieuvres ont trois cœurs et du sang bleu. Deux cœurs pompent le sang vers les branchies et le troisième vers le corps.",
+      "charCount": 108,
+      "tier": 1,
+      "topic": "fait animal",
+      "rareCharDensity": 0.07
+    },
+    {
+      "id": "fr_bf_004",
+      "language": "fr",
+      "text": "La guerre la plus courte de l'histoire n'a duré que 38 minutes. C'était entre la Grande-Bretagne et Zanzibar en 1896.",
+      "charCount": 106,
+      "tier": 2,
+      "topic": "fait historique",
+      "rareCharDensity": 0.08
+    },
+    {
+      "id": "fr_bf_005",
+      "language": "fr",
+      "text": "Les bananes sont des baies, mais les fraises ne le sont pas. Botaniquement, les baies se développent à partir d'un seul ovaire de fleur.",
+      "charCount": 116,
+      "tier": 2,
+      "topic": "fait botanique",
+      "rareCharDensity": 0.08
+    }
+  ],
+  "count": 5,
+  "generatedAt": "2024-01-15T10:00:00Z"
+}

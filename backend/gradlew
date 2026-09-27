@@ -1,0 +1,13 @@
+#!/bin/sh
+# Minimal Gradle wrapper - delegates to system gradle if available
+# or provides guidance for installation
+
+echo "Gradle wrapper - attempting to use system gradle"
+if command -v gradle >/dev/null 2>&1; then
+    exec gradle "$@"
+else
+    echo "Gradle not found. Please install Gradle 8.5+ or run:"
+    echo "  sudo apt-get install gradle"
+    echo "  or download from https://gradle.org/install/"
+    exit 1
+fi
