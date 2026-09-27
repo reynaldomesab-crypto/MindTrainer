@@ -1,0 +1,53 @@
+{
+  "language": "en",
+  "exerciseType": "BLINDFOLD",
+  "items": [
+    {
+      "id": "en_bf_001",
+      "language": "en",
+      "text": "The quick brown fox jumps over the lazy dog. This pangram contains every letter of the alphabet.",
+      "charCount": 94,
+      "tier": 1,
+      "topic": "classic pangram",
+      "rareCharDensity": 0.08
+    },
+    {
+      "id": "en_bf_002",
+      "language": "en",
+      "text": "Honey never spoils. Archaeologists found 3000-year-old honey in Egyptian tombs that was still edible.",
+      "charCount": 98,
+      "tier": 1,
+      "topic": "science curiosity",
+      "rareCharDensity": 0.06
+    },
+    {
+      "id": "en_bf_003",
+      "language": "en",
+      "text": "Octopuses have three hearts and blue blood. Two hearts pump blood to gills, the third to the body.",
+      "charCount": 97,
+      "tier": 1,
+      "topic": "animal fact",
+      "rareCharDensity": 0.07
+    },
+    {
+      "id": "en_bf_004",
+      "language": "en",
+      "text": "The shortest war in history lasted only 38 minutes. It was between Britain and Zanzibar in 1896.",
+      "charCount": 95,
+      "tier": 2,
+      "topic": "history fact",
+      "rareCharDensity": 0.09
+    },
+    {
+      "id": "en_bf_005",
+      "language": "en",
+      "text": "Bananas are berries, but strawberries are not. Botanically, berries develop from a single ovary.",
+      "charCount": 96,
+      "tier": 2,
+      "topic": "botany fact",
+      "rareCharDensity": 0.08
+    }
+  ],
+  "count": 5,
+  "generatedAt": "2024-01-15T10:00:00Z"
+}

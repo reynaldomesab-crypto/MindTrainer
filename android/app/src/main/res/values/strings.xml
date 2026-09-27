@@ -1,0 +1,181 @@
+<resources>
+    <string name="app_name">MindTrainer</string>
+    
+    <!-- General -->
+    <string name="loading">Loading…</string>
+    <string name="error_generic">Something went wrong. Please try again.</string>
+    <string name="error_network">No internet connection. Please check your network.</string>
+    <string name="retry">Retry</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="continue_text">Continue</string>
+    <string name="skip">Skip</string>
+    <string name="done">Done</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    
+    <!-- Auth -->
+    <string name="welcome_title">Welcome to MindTrainer</string>
+    <string name="welcome_subtitle">Train your brain, one day at a time</string>
+    <string name="login">Log In</string>
+    <string name="register">Create Account</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="or_continue_with">Or continue with</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="continue_with_apple">Continue with Apple</string>
+    <string name="continue_with_github">Continue with GitHub</string>
+    <string name="no_account">Don\'t have an account? </string>
+    <string name="have_account">Already have an account? </string>
+    <string name="register_link">Sign up</string>
+    <string name="login_link">Log in</string>
+    
+    <!-- Onboarding -->
+    <string name="onboarding_handedness_title">Which is your dominant hand?</string>
+    <string name="onboarding_handedness_subtitle">This helps us personalize your non-dominant hand exercises</string>
+    <string name="hand_right">Right-handed</string>
+    <string name="hand_left">Left-handed</string>
+    <string name="hand_ambidextrous">Ambidextrous</string>
+    <string name="onboarding_language_title">Choose your language</string>
+    <string name="onboarding_language_subtitle">Exercise content will be in this language</string>
+    <string name="onboarding_reminder_title">Set a daily reminder</string>
+    <string name="onboarding_reminder_subtitle">We\'ll notify you when it\'s time to train</string>
+    <string name="onboarding_baseline_title">Quick baseline</string>
+    <string name="onboarding_baseline_subtitle">We\'ll run a short calibration to set your starting difficulty</string>
+    
+    <!-- Home / Today -->
+    <string name="today_title">Today</string>
+    <string name="today_subtitle">Your daily brain practice</string>
+    <string name="exercise_completed">Completed</string>
+    <string name="exercise_available">Available</string>
+    <string name="exercise_locked">Comes back tomorrow</string>
+    <string name="all_done_title">All done for today!</string>
+    <string name="all_done_subtitle">Rest is productive too. See you tomorrow.</string>
+    <string name="progress_shortcut">View Progress</string>
+    
+    <!-- Exercise Names -->
+    <string name="exercise_schulte">Schulte Tables</string>
+    <string name="exercise_blindfold">Blindfold Writing</string>
+    <string name="exercise_nondominant">Non-Dominant Hand</string>
+    <string name="exercise_stroop">Stroop Challenge</string>
+    
+    <!-- Exercise Descriptions -->
+    <string name="schulte_desc">Find numbers 1-25 in order as fast as you can. 30 seconds.</string>
+    <string name="blindfold_desc">Type a short text with your eyes closed. Focus on rhythm.</string>
+    <string name="nondominant_desc">Write, trace, and tap with your non-dominant hand.</string>
+    <string name="stroop_desc">Name the ink color, ignore the word. Multiple modes.</string>
+    
+    <!-- Schulte -->
+    <string name="schulte_start">Start</string>
+    <string name="schulte_timer">Time: %1$d sec</string>
+    <string name="schulte_find">Find: %1$d</string>
+    <string name="schulte_complete">Complete!</string>
+    <string name="schulte_time">Time: %1$.2f sec</string>
+    <string name="schulte_accuracy">Accuracy: %1$.0f%%</string>
+    <string name="schulte_score">Score: %1$d</string>
+    <string name="schulte_download_package">Download 500 tables</string>
+    <string name="schulte_package_downloaded">Package saved to Downloads</string>
+    
+    <!-- Blindfold -->
+    <string name="blindfold_instruction">Close your eyes and type the text below</string>
+    <string name="blindfold_start">Start (3 sec countdown)</string>
+    <string name="blindfold_done">Done</string>
+    <string name="blindfold_result_title">Results</string>
+    <string name="blindfold_rms_error">RMS Error: %1$.2f key-widths</string>
+    <string name="blindfold_accuracy">Accuracy: %1$.0f%%</string>
+    <string name="blindfold_wpm">Speed: %1$.1f WPM</string>
+    <string name="blindfold_score">Score: %1$d</string>
+    
+    <!-- Non-Dominant -->
+    <string name="nondom_copywriting">Copywriting</string>
+    <string name="nondom_tracing">Shape Tracing</string>
+    <string name="nondom_tapping">Tap Sequence</string>
+    <string name="nondom_select_task">Select a task</string>
+    <string name="nondom_trace_instruction">Trace the path with your finger</string>
+    <string name="nondom_tap_instruction">Tap the highlighted targets in order</string>
+    <string name="nondom_result_score">Score: %1$d</string>
+    
+    <!-- Stroop -->
+    <string name="stroop_mode_classic">Classic</string>
+    <string name="stroop_mode_reverse">Reverse</string>
+    <string name="stroop_mode_switch">Switch</string>
+    <string name="stroop_mode_spatial">Spatial</string>
+    <string name="stroop_mode_speed">Speed</string>
+    <string name="stroop_mode_sequence">Sequence</string>
+    <string name="stroop_instruction_classic">Tap the button matching the INK COLOR</string>
+    <string name="stroop_instruction_reverse">Tap the button matching the WORD MEANING</string>
+    <string name="stroop_instruction_switch">%1$s: Tap the %2$s</string>
+    <string name="stroop_word">WORD</string>
+    <string name="stroop_color">COLOR</string>
+    <string name="stroop_instruction_spatial">Tap the side where the word appears</string>
+    <string name="stroop_instruction_speed">Respond as fast as possible for 30 seconds</string>
+    <string name="stroop_interference">Interference: %1$d ms</string>
+    <string name="stroop_inhibition_index">Inhibition Index: %1$.2f</string>
+    
+    <!-- Progress -->
+    <string name="progress_title">Your Progress</string>
+    <string name="progress_weekly">This Week</string>
+    <string name="progress_monthly">This Month</string>
+    <string name="progress_all_time">All Time</string>
+    <string name="progress_cognitive_age">Cognitive Age: %1$d</string>
+    <string name="progress_consistency">Consistency: %1$.0f%%</string>
+    <string name="progress_focus_index">Focus Index: %1$.2f</string>
+    <string name="progress_motor_symmetry">Motor Symmetry: %1$.0f%%</string>
+    <string name="progress_streak_current">Current Streak: %1$d days</string>
+    <string name="progress_streak_longest">Longest Streak: %1$d days</string>
+    <string name="progress_level">Level %1$.1f</string>
+    <string name="progress_trend_improving">Improving ↑</string>
+    <string name="progress_trend_stable">Stable →</string>
+    <string name="progress_trend_declining">Declining ↓</string>
+    <string name="progress_insights">Insights</string>
+    <string name="progress_no_insights">No insights yet. Complete more exercises!</string>
+    
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_account">Account</string>
+    <string name="settings_preferences">Preferences</string>
+    <string name="settings_reminders">Reminders</string>
+    <string name="settings_difficulty">Difficulty</string>
+    <string name="settings_accessibility">Accessibility</string>
+    <string name="settings_data">Data & Privacy</string>
+    <string name="settings_about">About</string>
+    
+    <string name="settings_language">Language</string>
+    <string name="settings_reminder_enable">Daily reminder</string>
+    <string name="settings_reminder_time">Reminder time</string>
+    <string name="settings_reminder_tone">Reminder tone</string>
+    <string name="settings_reminder_message">Custom message</string>
+    <string name="settings_difficulty_schulte">Schulte Tables</string>
+    <string name="settings_difficulty_blindfold">Blindfold Writing</string>
+    <string name="settings_difficulty_nondominant">Non-Dominant Hand</string>
+    <string name="settings_difficulty_stroop">Stroop Challenge</string>
+    <string name="difficulty_challenge">Challenge me</string>
+    <string name="difficulty_maintain">Maintain</string>
+    <string name="difficulty_relax">Relaxed</string>
+    <string name="settings_colorblind">Colorblind mode</string>
+    <string name="settings_reduced_motion">Reduced motion</string>
+    <string name="settings_large_text">Large text</string>
+    <string name="settings_analytics">Share anonymous analytics</string>
+    <string name="settings_export_data">Export my data</string>
+    <string name="settings_delete_account">Delete account</string>
+    <string name="settings_version">Version %1$s</string>
+    
+    <!-- Reminder tones -->
+    <string name="reminder_tone_gentle">Gentle</string>
+    <string name="reminder_tone_standard">Standard</string>
+    <string name="reminder_tone_none">Silent (badge only)</string>
+    
+    <!-- Accessibility -->
+    <string name="accessibility_schulte_grid">Schulte grid, %1$d by %1$d</string>
+    <string name="accessibility_schulte_cell">Number %1$d, row %2$d, column %3$d</string>
+    <string name="accessibility_blindfold_input">Blindfold writing input, double tap to finish</string>
+    <string name="accessibility_stroop_stimulus">Word: %1$s, Color: %2$s</string>
+    <string name="accessibility_stroop_button">%1$s button</string>
+    
+    <!-- Errors -->
+    <string name="error_already_completed">You\'ve already completed this exercise today</string>
+    <string name="error_session_expired">Your session has expired. Please log in again.</string>
+    <string name="error_sync_failed">Failed to sync. Will retry automatically.</string>
+    <string name="error_package_download">Failed to download package</string>
+</resources>

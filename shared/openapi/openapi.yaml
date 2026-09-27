@@ -1,0 +1,1517 @@
+openapi: 3.0.3
+info:
+  title: MindTrainer API
+  version: 1.0.0
+  description: API for MindTrainer brain training app
+  contact:
+    name: MindTrainer Team
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: https://api.mindtrainer.app/v1
+    description: Production server
+  - url: http://localhost:8080/api/v1
+    description: Development server
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: Authentication
+    description: User authentication and authorization
+  - name: Exercises - Schulte
+    description: Schulte Tables exercise endpoints
+  - name: Exercises - Blindfold
+    description: Blindfold Writing exercise endpoints
+  - name: Exercises - NonDominant
+    description: Non-Dominant Hand exercise endpoints
+  - name: Exercises - Stroop
+    description: Stroop Challenge exercise endpoints
+  - name: Progress
+    description: User progress and analytics
+  - name: User
+    description: User profile and settings
+  - name: Corpus
+    description: Exercise content corpus
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    # ========== Common Schemas ==========
+    ErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        validationErrors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          minimum: 0
+        size:
+          type: integer
+          minimum: 1
+          maximum: 100
+        sort:
+          type: array
+          items:
+            type: string
+
+    PageResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            type: object
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+        size:
+          type: integer
+        number:
+          type: integer
+
+    # ========== Auth Schemas ==========
+    RegisterRequest:
+      type: object
+      required:
+        - email
+        - password
+        - username
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+          minLength: 8
+        username:
+          type: string
+          minLength: 3
+          maxLength: 30
+          pattern: '^[a-zA-Z0-9_]+$'
+        language:
+          type: string
+          enum: [en, es, fr, de, pt, zh, ja, ko, ru, ar, hi, it]
+          default: en
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+
+    OAuthRequest:
+      type: object
+      required:
+        - provider
+        - token
+      properties:
+        provider:
+          type: string
+          enum: [google, apple, github]
+        token:
+          type: string
+
+    AuthResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        tokenType:
+          type: string
+          default: Bearer
+        expiresIn:
+          type: integer
+        user:
+          $ref: '#/components/schemas/UserProfile'
+
+    RefreshRequest:
+      type: object
+      required:
+        - refreshToken
+      properties:
+        refreshToken:
+          type: string
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        username:
+          type: string
+        avatarUrl:
+          type: string
+          format: uri
+        language:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        stats:
+          $ref: '#/components/schemas/UserStats'
+
+    UserStats:
+      type: object
+      properties:
+        totalSessions:
+          type: integer
+        totalTimeMs:
+          type: integer
+        currentStreak:
+          type: integer
+        longestStreak:
+          type: integer
+        lastPlayedAt:
+          type: string
+          format: date-time
+
+    # ========== Exercise Common Schemas ==========
+    ExerciseType:
+      type: string
+      enum: [SCHULTE, BLINDFOLD, NON_DOMINANT, STROOP]
+
+    DifficultyPreference:
+      type: string
+      enum: [CHALLENGE, MAINTAIN, RELAX]
+
+    DailyExerciseStatus:
+      type: object
+      properties:
+        exerciseType:
+          $ref: '#/components/schemas/ExerciseType'
+        completed:
+          type: boolean
+        completedAt:
+          type: string
+          format: date-time
+        sessionId:
+          type: string
+          format: uuid
+
+    # ========== Schulte Schemas ==========
+    SchulteTableConfig:
+      type: object
+      properties:
+        seed:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          enum: [4, 5, 6, 7]
+          default: 5
+        timeLimitMs:
+          type: integer
+          default: 30000
+        showNumbers:
+          type: boolean
+          default: true
+
+    SchulteDailyResponse:
+      type: object
+      properties:
+        config:
+          $ref: '#/components/schemas/SchulteTableConfig'
+        numbers:
+          type: array
+          items:
+            type: integer
+        expiresAt:
+          type: string
+          format: date-time
+
+    SchultePackageRequest:
+      type: object
+      properties:
+        count:
+          type: integer
+          minimum: 100
+          maximum: 1000
+          default: 500
+        size:
+          type: integer
+          enum: [4, 5, 6, 7]
+
+    SchultePackageResponse:
+      type: object
+      properties:
+        tables:
+          type: array
+          items:
+            $ref: '#/components/schemas/SchulteTableConfig'
+        generatedAt:
+          type: string
+          format: date-time
+
+    SchulteSessionRequest:
+      type: object
+      required:
+        - config
+        - completionTimeMs
+        - tappedSequence
+      properties:
+        config:
+          $ref: '#/components/schemas/SchulteTableConfig'
+        completionTimeMs:
+          type: integer
+          minimum: 0
+        tappedSequence:
+          type: array
+          items:
+            type: integer
+        accuracy:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 1
+
+    SchulteSessionResponse:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+        score:
+          type: integer
+        accuracy:
+          type: number
+          format: double
+        level:
+          type: number
+          format: double
+        nextLevel:
+          type: number
+          format: double
+
+    # ========== Blindfold Schemas ==========
+    BlindfoldText:
+      type: object
+      properties:
+        id:
+          type: string
+        language:
+          type: string
+        text:
+          type: string
+        charCount:
+          type: integer
+        tier:
+          type: integer
+          enum: [1, 2, 3]
+        topic:
+          type: string
+        rareCharDensity:
+          type: number
+          format: double
+
+    BlindfoldDailyResponse:
+      type: object
+      properties:
+        text:
+          $ref: '#/components/schemas/BlindfoldText'
+        expiresAt:
+          type: string
+          format: date-time
+
+    KeyboardLayout:
+      type: string
+      enum: [QWERTY, QWERTZ, AZERTY, QZERTY, JCUKEN, ARABIC_101, PINYIN, FLICK, GODAN, HANGUL_2SET, HANGUL_3SET, DEVANAGARI]
+
+    BlindfoldSessionRequest:
+      type: object
+      required:
+        - textId
+        - actualText
+        - keyboardLayout
+        - keyDistances
+        - timeMs
+      properties:
+        textId:
+          type: string
+        actualText:
+          type: string
+        keyboardLayout:
+          $ref: '#/components/schemas/KeyboardLayout'
+        keyDistances:
+          type: array
+          items:
+            type: number
+            format: double
+        rmsError:
+          type: number
+          format: double
+        timeMs:
+          type: integer
+
+    BlindfoldSessionResponse:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+        score:
+          type: integer
+        rmsError:
+          type: number
+          format: double
+        accuracy:
+          type: number
+          format: double
+        lengthFactor:
+          type: number
+          format: double
+        level:
+          type: number
+          format: double
+        nextLevel:
+          type: number
+          format: double
+
+    # ========== Non-Dominant Schemas ==========
+    NonDomTaskType:
+      type: string
+      enum: [COPYWRITING, TRACING, TAPPING]
+
+    NonDomDailyResponse:
+      type: object
+      properties:
+        copywriting:
+          $ref: '#/components/schemas/BlindfoldText'
+        tracing:
+          $ref: '#/components/schemas/ShapePath'
+        tapping:
+          $ref: '#/components/schemas/TapSequence'
+        expiresAt:
+          type: string
+          format: date-time
+
+    ShapePath:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [SPIRAL, FIGURE8, ZIGZAG, WAVE, MAZE]
+        points:
+          type: array
+          items:
+            type: object
+            properties:
+              x:
+                type: number
+                format: double
+              y:
+                type: number
+                format: double
+        targetTimeMs:
+          type: integer
+        difficulty:
+          type: number
+          format: double
+
+    TapSequence:
+      type: object
+      properties:
+        id:
+          type: string
+        gridSize:
+          type: integer
+        targets:
+          type: array
+          items:
+            type: integer
+        count:
+          type: integer
+        timeLimitMs:
+          type: integer
+
+    NonDomSessionRequest:
+      type: object
+      required:
+        - taskType
+        - contentId
+        - handUsed
+        - metrics
+      properties:
+        taskType:
+          $ref: '#/components/schemas/NonDomTaskType'
+        contentId:
+          type: string
+        handUsed:
+          type: string
+          enum: [LEFT, RIGHT]
+        metrics:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+
+    NonDomSessionResponse:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+        score:
+          type: integer
+        taskScore:
+          type: integer
+        level:
+          type: number
+          format: double
+        nextLevel:
+          type: number
+          format: double
+
+    # ========== Stroop Schemas ==========
+    StroopMode:
+      type: string
+      enum: [CLASSIC, REVERSE, SWITCH, SPATIAL, SPEED, SEQUENCE]
+
+    StroopCondition:
+      type: string
+      enum: [CONGRUENT, INCONGRUENT, NEUTRAL]
+
+    StroopStimulus:
+      type: object
+      properties:
+        word:
+          type: string
+        inkColor:
+          type: string
+        position:
+          type: string
+          enum: [LEFT, RIGHT, CENTER]
+        audioColor:
+          type: string
+
+    StroopDailyResponse:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/StroopMode'
+        config:
+          $ref: '#/components/schemas/StroopSessionConfig'
+        stimuli:
+          type: array
+          items:
+            $ref: '#/components/schemas/StroopStimulus'
+        expiresAt:
+          type: string
+          format: date-time
+
+    StroopSessionConfig:
+      type: object
+      properties:
+        colorCount:
+          type: integer
+          enum: [4, 5, 6]
+        incongruentRatio:
+          type: number
+          format: double
+        stimulusDurationMs:
+          type: integer
+        switchFrequency:
+          type: number
+          format: double
+        sequenceLength:
+          type: integer
+
+    StroopTrialRequest:
+      type: object
+      required:
+        - stimulus
+        - response
+        - rtMs
+        - correct
+      properties:
+        stimulus:
+          $ref: '#/components/schemas/StroopStimulus'
+        response:
+          type: string
+        rtMs:
+          type: integer
+        correct:
+          type: boolean
+        switchTrial:
+          type: boolean
+
+    StroopSessionRequest:
+      type: object
+      required:
+        - mode
+        - trials
+      properties:
+        mode:
+          $ref: '#/components/schemas/StroopMode'
+        trials:
+          type: array
+          items:
+            $ref: '#/components/schemas/StroopTrialRequest'
+
+    StroopSessionResponse:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+        interferenceEffect:
+          type: number
+          format: double
+        interferenceRatio:
+          type: number
+          format: double
+        switchCost:
+          type: number
+          format: double
+        throughput:
+          type: number
+          format: double
+        inhibitionIndex:
+          type: number
+          format: double
+        flexibilityIndex:
+          type: number
+          format: double
+        level:
+          type: number
+          format: double
+        nextLevel:
+          type: number
+          format: double
+
+    # ========== Progress Schemas ==========
+    ExerciseProgress:
+      type: object
+      properties:
+        exerciseType:
+          $ref: '#/components/schemas/ExerciseType'
+        currentLevel:
+          type: number
+          format: double
+        sessionsCompleted:
+          type: integer
+        lastSession:
+          type: string
+          format: date-time
+        trend:
+          type: string
+          enum: [IMPROVING, STABLE, DECLINING]
+        personalBests:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+        history:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+              score:
+                type: integer
+              level:
+                type: number
+                format: double
+              metrics:
+                type: object
+
+    GlobalMetrics:
+      type: object
+      properties:
+        cognitiveAge:
+          type: integer
+        consistencyScore:
+          type: number
+          format: double
+        focusIndex:
+          type: number
+          format: double
+        motorSymmetry:
+          type: number
+          format: double
+        weeklyActiveDays:
+          type: integer
+
+    StreakData:
+      type: object
+      properties:
+        current:
+          type: integer
+        longest:
+          type: integer
+        lastActiveDate:
+          type: string
+          format: date
+        streakFreezeUsed:
+          type: boolean
+
+    Insight:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        generatedAt:
+          type: string
+          format: date-time
+        readAt:
+          type: string
+          format: date-time
+
+    ProgressDashboardResponse:
+      type: object
+      properties:
+        todayStatus:
+          type: array
+          items:
+            $ref: '#/components/schemas/DailyExerciseStatus'
+        exerciseProgress:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ExerciseProgress'
+        globalMetrics:
+          $ref: '#/components/schemas/GlobalMetrics'
+        streaks:
+          $ref: '#/components/schemas/StreakData'
+        insights:
+          type: array
+          items:
+            $ref: '#/components/schemas/Insight'
+
+    # ========== User Settings Schemas ==========
+    ReminderSettings:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        time:
+          type: string
+          pattern: '^([01]?[0-9]|2[0-3]):[0-5][0-9]$'
+        timezone:
+          type: string
+        daysOfWeek:
+          type: array
+          items:
+            type: string
+            enum: [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY]
+        tone:
+          type: string
+          enum: [GENTLE, STANDARD, NONE]
+        message:
+          type: string
+
+    DifficultyPreferences:
+      type: object
+      properties:
+        schulte:
+          $ref: '#/components/schemas/DifficultyPreference'
+        blindfold:
+          $ref: '#/components/schemas/DifficultyPreference'
+        nonDominant:
+          $ref: '#/components/schemas/DifficultyPreference'
+        stroop:
+          $ref: '#/components/schemas/DifficultyPreference'
+
+    UserPreferences:
+      type: object
+      properties:
+        language:
+          type: string
+        reminders:
+          $ref: '#/components/schemas/ReminderSettings'
+        difficulty:
+          $ref: '#/components/schemas/DifficultyPreferences'
+        colorblindMode:
+          type: boolean
+        reducedMotion:
+          type: boolean
+        largeText:
+          type: boolean
+        analyticsOptIn:
+          type: boolean
+
+    # ========== Corpus Schemas ==========
+    CorpusPackageResponse:
+      type: object
+      properties:
+        language:
+          type: string
+        exerciseType:
+          $ref: '#/components/schemas/ExerciseType'
+        items:
+          type: array
+          items:
+            type: object
+        count:
+          type: integer
+        generatedAt:
+          type: string
+          format: date-time
+
+    StroopWordSetsResponse:
+      type: object
+      properties:
+        language:
+          type: string
+        colorWords:
+          type: array
+          items:
+            type: string
+        neutralWords:
+          type: array
+          items:
+            type: string
+        emotionalWords:
+          type: array
+          items:
+            type: string
+
+paths:
+  /auth/register:
+    post:
+      tags: [Authentication]
+      summary: Register new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: User registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Email or username already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: Login with email/password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/oauth/{provider}:
+    post:
+      tags: [Authentication]
+      summary: OAuth2 login
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [google, apple, github]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OAuthRequest'
+      responses:
+        '200':
+          description: OAuth login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/refresh:
+    post:
+      tags: [Authentication]
+      summary: Refresh access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
+      responses:
+        '200':
+          description: Token refreshed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/logout:
+    post:
+      tags: [Authentication]
+      summary: Logout (invalidate refresh token)
+      security:
+        - BearerAuth: []
+      responses:
+        '204':
+          description: Logged out
+
+  /exercises/schulte/daily:
+    get:
+      tags: [Exercises - Schulte]
+      summary: Get today's Schulte table
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: size
+          in: query
+          schema:
+            type: integer
+            enum: [4, 5, 6, 7]
+            default: 5
+      responses:
+        '200':
+          description: Daily table
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchulteDailyResponse'
+        '403':
+          description: Already completed today
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /exercises/schulte/package:
+    get:
+      tags: [Exercises - Schulte]
+      summary: Download package of Schulte tables
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: count
+          in: query
+          schema:
+            type: integer
+            minimum: 100
+            maximum: 1000
+            default: 500
+        - name: size
+          in: query
+          schema:
+            type: integer
+            enum: [4, 5, 6, 7]
+            default: 5
+      responses:
+        '200':
+          description: Package of tables
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchultePackageResponse'
+
+  /exercises/schulte/submit:
+    post:
+      tags: [Exercises - Schulte]
+      summary: Submit Schulte session result
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchulteSessionRequest'
+      responses:
+        '200':
+          description: Session recorded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchulteSessionResponse'
+        '403':
+          description: Already completed today
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /exercises/blindfold/daily:
+    get:
+      tags: [Exercises - Blindfold]
+      summary: Get today's blindfold text
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: lang
+          in: query
+          schema:
+            type: string
+            enum: [en, es, fr, de, pt, zh, ja, ko, ru, ar, hi, it]
+      responses:
+        '200':
+          description: Daily text
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlindfoldDailyResponse'
+        '403':
+          description: Already completed today
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /exercises/blindfold/submit:
+    post:
+      tags: [Exercises - Blindfold]
+      summary: Submit blindfold session result
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlindfoldSessionRequest'
+      responses:
+        '200':
+          description: Session recorded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlindfoldSessionResponse'
+        '403':
+          description: Already completed today
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /exercises/nondom/daily:
+    get:
+      tags: [Exercises - NonDominant]
+      summary: Get today's non-dominant hand tasks
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: lang
+          in: query
+          schema:
+            type: string
+            enum: [en, es, fr, de, pt, zh, ja, ko, ru, ar, hi, it]
+      responses:
+        '200':
+          description: Daily tasks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NonDomDailyResponse'
+        '403':
+          description: Already completed today
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /exercises/nondom/submit:
+    post:
+      tags: [Exercises - NonDominant]
+      summary: Submit non-dominant hand session result
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NonDomSessionRequest'
+      responses:
+        '200':
+          description: Session recorded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NonDomSessionResponse'
+        '403':
+          description: Already completed today
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /exercises/stroop/daily:
+    get:
+      tags: [Exercises - Stroop]
+      summary: Get today's Stroop challenge
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: mode
+          in: query
+          schema:
+            $ref: '#/components/schemas/StroopMode'
+            default: CLASSIC
+        - name: lang
+          in: query
+          schema:
+            type: string
+            enum: [en, es, fr, de, pt, zh, ja, ko, ru, ar, hi, it]
+      responses:
+        '200':
+          description: Daily challenge
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StroopDailyResponse'
+        '403':
+          description: Already completed today
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /exercises/stroop/submit:
+    post:
+      tags: [Exercises - Stroop]
+      summary: Submit Stroop session result
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StroopSessionRequest'
+      responses:
+        '200':
+          description: Session recorded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StroopSessionResponse'
+        '403':
+          description: Already completed today
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /exercises/stroop/modes:
+    get:
+      tags: [Exercises - Stroop]
+      summary: Get available Stroop modes
+      responses:
+        '200':
+          description: Available modes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StroopMode'
+
+  /exercises/stroop/wordsets:
+    get:
+      tags: [Exercises - Stroop]
+      summary: Get word sets for language
+      parameters:
+        - name: lang
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [en, es, fr, de, pt, zh, ja, ko, ru, ar, hi, it]
+      responses:
+        '200':
+          description: Word sets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StroopWordSetsResponse'
+
+  /progress/dashboard:
+    get:
+      tags: [Progress]
+      summary: Get progress dashboard
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressDashboardResponse'
+
+  /progress/exercise/{type}:
+    get:
+      tags: [Progress]
+      summary: Get exercise-specific progress
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ExerciseType'
+        - name: days
+          in: query
+          schema:
+            type: integer
+            default: 30
+      responses:
+        '200':
+          description: Exercise progress
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExerciseProgress'
+
+  /progress/insights:
+    get:
+      tags: [Progress]
+      summary: Get AI-generated insights
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Insights
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Insight'
+
+  /users/me:
+    get:
+      tags: [User]
+      summary: Get current user profile
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+
+    patch:
+      tags: [User]
+      summary: Update user profile
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                avatarUrl:
+                  type: string
+                  format: uri
+                language:
+                  type: string
+      responses:
+        '200':
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+
+  /users/me/preferences:
+    get:
+      tags: [User]
+      summary: Get user preferences
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: User preferences
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPreferences'
+
+    patch:
+      tags: [User]
+      summary: Update user preferences
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPreferences'
+      responses:
+        '200':
+          description: Updated preferences
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPreferences'
+
+  /users/me/reminders:
+    get:
+      tags: [User]
+      summary: Get reminder settings
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Reminder settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReminderSettings'
+
+    patch:
+      tags: [User]
+      summary: Update reminder settings
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReminderSettings'
+      responses:
+        '200':
+          description: Updated reminders
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReminderSettings'
+
+  /users/me/difficulty-preference:
+    get:
+      tags: [User]
+      summary: Get difficulty preferences
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Difficulty preferences
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DifficultyPreferences'
+
+    patch:
+      tags: [User]
+      summary: Update difficulty preferences
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DifficultyPreferences'
+      responses:
+        '200':
+          description: Updated preferences
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DifficultyPreferences'
+
+  /corpus/schulte/package:
+    get:
+      tags: [Corpus]
+      summary: Download Schulte tables package
+      parameters:
+        - name: lang
+          in: query
+          schema:
+            type: string
+            enum: [en, es, fr, de, pt, zh, ja, ko, ru, ar, hi, it]
+        - name: count
+          in: query
+          schema:
+            type: integer
+            minimum: 100
+            maximum: 1000
+            default: 500
+        - name: size
+          in: query
+          schema:
+            type: integer
+            enum: [4, 5, 6, 7]
+            default: 5
+      responses:
+        '200':
+          description: Package
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorpusPackageResponse'
+
+  /corpus/blindfold/texts:
+    get:
+      tags: [Corpus]
+      summary: Get blindfold texts
+      parameters:
+        - name: lang
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [en, es, fr, de, pt, zh, ja, ko, ru, ar, hi, it]
+        - name: tier
+          in: query
+          schema:
+            type: integer
+            enum: [1, 2, 3]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+      responses:
+        '200':
+          description: Texts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorpusPackageResponse'
+
+  /corpus/nondom/texts:
+    get:
+      tags: [Corpus]
+      summary: Get non-dominant texts
+      parameters:
+        - name: lang
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [en, es, fr, de, pt, zh, ja, ko, ru, ar, hi, it]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+      responses:
+        '200':
+          description: Texts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorpusPackageResponse'
+
+  /corpus/nondom/paths:
+    get:
+      tags: [Corpus]
+      summary: Get tracing paths
+      responses:
+        '200':
+          description: Paths
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorpusPackageResponse'
+
+  /corpus/nondom/sequences:
+    get:
+      tags: [Corpus]
+      summary: Get tap sequences
+      responses:
+        '200':
+          description: Sequences
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorpusPackageResponse'

@@ -1,0 +1,6 @@
+{
+  "language": "en",
+  "colorWords": ["RED", "BLUE", "GREEN", "YELLOW", "PURPLE", "ORANGE"],
+  "neutralWords": ["DOG", "HOUSE", "TABLE", "BOOK", "CAR", "TREE", "WATER", "SUN", "MOON", "STAR", "BIRD", "FISH", "CHAIR", "WINDOW", "DOOR", "PHONE", "CLOCK", "SHOE", "HAT", "COAT"],
+  "emotionalWords": ["ANXIETY", "FEAR", "JOY", "CALM", "ANGER", "SADNESS", "HOPE", "LOVE", "PEACE", "STRESS", "WORRY", "HAPPY", "FREEDOM", "TRUST", "COURAGE"]
+}

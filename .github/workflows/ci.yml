@@ -1,0 +1,342 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  JAVA_VERSION: '21'
+  NODE_VERSION: '20'
+  GRADLE_VERSION: '8.5'
+
+jobs:
+  # ============================================
+  # Backend - Spring Boot
+  # ============================================
+  backend-test:
+    name: Backend - Test
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: mindtrainer
+          POSTGRES_USER: mindtrainer
+          POSTGRES_PASSWORD: mindtrainer
+        ports: 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports: 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@v3
+
+      - name: Build and test backend
+        working-directory: ./backend
+        run: ./gradlew clean test --info
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-reports
+          path: backend/build/reports/tests/
+          retention-days: 7
+
+  backend-build:
+    name: Backend - Build Docker
+    runs-on: ubuntu-latest
+    needs: backend-test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        working-directory: ./backend
+        run: |
+          docker build -t mindtrainer-backend:${{ github.sha }} .
+          docker save mindtrainer-backend:${{ github.sha }} | gzip > backend-image.tar.gz
+
+      - name: Upload Docker image
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-docker-image
+          path: backend/backend-image.tar.gz
+          retention-days: 1
+
+  # ============================================
+  # Android
+  # ============================================
+  android-test:
+    name: Android - Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 34
+          ndk-version: r26c
+          emulator: true
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle-
+
+      - name: Run unit tests
+        working-directory: ./android
+        run: ./gradlew testDebugUnitTest --info
+
+      - name: Start emulator
+        run: |
+          emulator -avd test -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect &
+          adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done'
+
+      - name: Run instrumented tests
+        working-directory: ./android
+        run: ./gradlew connectedDebugAndroidTest --info
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-test-reports
+          path: android/app/build/reports/
+          retention-days: 7
+
+  android-build:
+    name: Android - Build
+    runs-on: ubuntu-latest
+    needs: android-test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 34
+
+      - name: Build Debug APK
+        working-directory: ./android
+        run: ./gradlew assembleDebug
+
+      - name: Build Release AAB
+        working-directory: ./android
+        run: ./gradlew bundleRelease
+        env:
+          KEYSTORE_PATH: ${{ secrets.KEYSTORE_PATH }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-build
+          path: |
+            android/app/build/outputs/apk/debug/*.apk
+            android/app/build/outputs/bundle/release/*.aab
+          retention-days: 30
+
+  # ============================================
+  # Web - Next.js
+  # ============================================
+  web-test:
+    name: Web - Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./web
+        run: npm ci
+
+      - name: Run linting
+        working-directory: ./web
+        run: npm run lint
+
+      - name: Run type checking
+        working-directory: ./web
+        run: npm run type-check
+
+      - name: Run tests
+        working-directory: ./web
+        run: npm run test -- --coverage
+
+      - name: Build
+        working-directory: ./web
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8080/api/v1
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          directory: ./web/coverage
+          flags: web
+          fail_ci_if_error: false
+
+  # ============================================
+  # Shared - OpenAPI Validation
+  # ============================================
+  openapi-validate:
+    name: Validate OpenAPI Spec
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate OpenAPI spec
+        uses: ibiqlik/action-openapi-validator@v1
+        with:
+          spec-path: shared/openapi/openapi.yaml
+
+  # ============================================
+  # Code Quality
+  # ============================================
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run ktlint (Android + Backend)
+        run: |
+          ./backend/gradlew ktlintCheck
+          ./android/gradlew ktlintCheck
+
+      - name: Run detekt
+        working-directory: ./android
+        run: ./gradlew detekt
+
+  # ============================================
+  # Security Scan
+  # ============================================
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run OWASP Dependency Check (Backend)
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'mindtrainer-backend'
+          path: './backend'
+          format: 'HTML'
+          out: 'reports'
+          args: >
+            --failOnCVSS 7
+            --suppression ./backend/dependency-check-suppressions.xml
+
+      - name: Run OWASP Dependency Check (Android)
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'mindtrainer-android'
+          path: './android'
+          format: 'HTML'
+          out: 'reports'
+          args: >
+            --failOnCVSS 7
+
+      - name: Run npm audit (Web)
+        working-directory: ./web
+        run: npm audit --audit-level=high
+
+      - name: Upload security reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-reports
+          path: reports/
+          retention-days: 30
+
+  # ============================================
+  # Summary
+  # ============================================
+  summary:
+    name: CI Summary
+    runs-on: ubuntu-latest
+    needs: [backend-test, backend-build, android-test, android-build, web-test, openapi-validate, code-quality, security-scan]
+    if: always()
+    steps:
+      - name: Check job statuses
+        run: |
+          echo "Backend Test: ${{ needs.backend-test.result }}"
+          echo "Backend Build: ${{ needs.backend-build.result }}"
+          echo "Android Test: ${{ needs.android-test.result }}"
+          echo "Android Build: ${{ needs.android-build.result }}"
+          echo "Web Test: ${{ needs.web-test.result }}"
+          echo "OpenAPI Validate: ${{ needs.openapi-validate.result }}"
+          echo "Code Quality: ${{ needs.code-quality.result }}"
+          echo "Security Scan: ${{ needs.security-scan.result }}"
+
+      - name: Fail if any required job failed
+        if: |
+          needs.backend-test.result != 'success' ||
+          needs.backend-build.result != 'success' ||
+          needs.android-test.result != 'success' ||
+          needs.android-build.result != 'success' ||
+          needs.web-test.result != 'success' ||
+          needs.openapi-validate.result != 'success' ||
+          needs.code-quality.result != 'success' ||
+          needs.security-scan.result != 'success'
+        run: exit 1
