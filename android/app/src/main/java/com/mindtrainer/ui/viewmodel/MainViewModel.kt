@@ -6,10 +6,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.mindtrainer.domain.model.*
+import com.mindtrainer.domain.repository.ProgressRepository
+import com.mindtrainer.domain.repository.UserRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor() : ViewModel() {
+class MainViewModel @Inject constructor(
+    private val userRepository: UserRepository,
+    private val progressRepository: ProgressRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState = _uiState.asStateFlow()
@@ -45,29 +51,44 @@ class MainViewModel @Inject constructor() : ViewModel() {
     private fun loadInitialData() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            // TODO: Load from repository
-            // Simulate loading
-            try {
-                Thread.sleep(500)
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        isAuthenticated = true, // For demo
-                        user = UserProfile(
-                            id = "demo-user",
-                            username = "demo",
-                            email = "demo@mindtrainer.app",
-                            avatarUrl = null,
-                            language = "en",
-                            currentStreak = 7,
-                            longestStreak = 14
+            val result = userRepository.getProfile()
+            _uiState.update {
+                when (result) {
+                    is Result.Success -> {
+                        val profile = result.data
+                        it.copy(
+                            isLoading = false,
+                            isAuthenticated = true,
+                            user = UserProfile(
+                                id = profile.id.toString(),
+                                username = profile.username,
+                                email = profile.email,
+                                avatarUrl = profile.avatarUrl,
+                                language = profile.language,
+                                currentStreak = profile.stats.currentStreak,
+                                longestStreak = profile.stats.longestStreak
+                            ),
+                            todayExercises = loadTodayExercises()
                         )
+                    }
+                    is Result.Error -> it.copy(
+                        isLoading = false,
+                        error = result.message
                     )
                 }
-            } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false, error = e.message) }
             }
         }
+    }
+
+    private fun loadTodayExercises(): Map<String, Boolean> {
+        // This would be loaded from the server or local storage
+        // For now, return default values
+        return mapOf(
+            "schulte" to false,
+            "blindfold" to false,
+            "nondominant" to false,
+            "stroop" to false
+        )
     }
 
     fun onExerciseCompleted(exerciseType: String) {
@@ -79,17 +100,42 @@ class MainViewModel @Inject constructor() : ViewModel() {
     }
 
     fun logout() {
-        _uiState.update { state ->
-            state.copy(
-                isAuthenticated = false,
-                user = null,
-                todayExercises = mapOf(
-                    "schulte" to false,
-                    "blindfold" to false,
-                    "nondominant" to false,
-                    "stroop" to false
+        viewModelScope.launch {
+            userRepository.logout()
+            _uiState.update { state ->
+                state.copy(
+                    isAuthenticated = false,
+                    user = null,
+                    todayExercises = mapOf(
+                        "schulte" to false,
+                        "blindfold" to false,
+                        "nondominant" to false,
+                        "stroop" to false
+                    )
                 )
-            )
+            }
+        }
+    }
+
+    fun refreshProgress() {
+        viewModelScope.launch {
+            val result = progressRepository.getDashboard()
+            _uiState.update {
+                when (result) {
+                    is Result.Success -> {
+                        val dashboard = result.data
+                        val todayExercises = dashboard.todayStatus.associateBy(
+                            { it.exerciseType.lowercase() },
+                            { it.completed }
+                        )
+                        it.copy(
+                            todayExercises = todayExercises,
+                            currentStreak = dashboard.streaks.current
+                        )
+                    }
+                    is Result.Error -> it.copy(error = result.message)
+                }
+            }
         }
     }
 }
